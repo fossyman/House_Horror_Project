@@ -8,7 +8,7 @@ public class PlayerManager : KinematicBody
     
     public override void _Ready()
     {
-        Input.SetMouseMode(Input.MouseMode.Captured);
+       // Input.SetMouseMode(Input.MouseMode.Captured);
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.

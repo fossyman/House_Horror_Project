@@ -14,6 +14,13 @@ config/name="House Horror"
 run/main_scene="res://Test area.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/width=1920
+window/size/height=1080
+window/stretch/mode="2d"
+window/stretch/aspect="keep"
+
 [input]
 
 move_forward={
@@ -41,6 +48,11 @@ toggle_inventory={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777218,"unicode":0,"echo":false,"script":null)
  ]
 }
+
+[layer_names]
+
+3d_render/layer_1="Base Layer"
+3d_render/layer_20="3D UI ELEMENTS"
 
 [physics]
 

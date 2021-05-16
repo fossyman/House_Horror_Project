@@ -11,7 +11,7 @@ public class InventoryManager : Spatial
 	private Vector3 Radius = new Vector3(2,0,2);
 	private float OrbitAngleOffset;
 	private Spatial ItemSpatialArea;
-	private bool _CanRotate=true;
+	[Export]private bool _CanRotate=true;
 
 	private Tween InventoryTweener;
 	public override void _Ready()
@@ -27,8 +27,8 @@ public class InventoryManager : Spatial
 	CurrentItems.Add(_ItemToAdd);
 	Spatial ItemScene = (Spatial)_ItemToAdd.ItemScene.Instance();
 	ItemSpatialArea.AddChild(ItemScene);
-	ItemSpatialArea.RotationDegrees = new Vector3(0,-90,0);
 	UpdateInventoryCircle();
+    ResetInventoryRotation();
 	}
 
 		private void SetUpInventoryCircle()
@@ -38,12 +38,19 @@ public class InventoryManager : Spatial
 		UpdateInventoryCircle();
 	}
 
+	private void ResetInventoryRotation()
+	{
+	InventoryTweener.RemoveAll();
+	ItemSpatialArea.RotationDegrees = new Vector3(0,-90,0);
+	_CanRotate=true;
+	}
+
 	private void RotateInventory()
 	{
 		if(_CanRotate){
-		InventoryTweener.InterpolateProperty(ItemSpatialArea,"rotation_degrees",ItemSpatialArea.RotationDegrees,ItemSpatialArea.RotationDegrees + new Vector3(0,Mathf.Rad2Deg(Mathf.Pi/CurrentItems.Count*2),0),0.5f,Tween.TransitionType.Linear,Tween.EaseType.InOut);
-		InventoryTweener.Start();
 		_CanRotate=false;
+		InventoryTweener.InterpolateProperty(ItemSpatialArea,"rotation_degrees",ItemSpatialArea.RotationDegrees,ItemSpatialArea.RotationDegrees + new Vector3(0,Mathf.Rad2Deg(Mathf.Pi/CurrentItems.Count*2),0),0.8f,Tween.TransitionType.Sine,Tween.EaseType.InOut);
+		InventoryTweener.Start();
 		}
 	}
 
@@ -77,6 +84,24 @@ public class InventoryManager : Spatial
     }
 	public void TweenerFinished()
   	{
+		GD.Print("Finished");
 		_CanRotate=true;
+		CheckIfRotationLooped();
   	}
+
+	private void CheckIfRotationLooped()
+	{
+		if(ItemSpatialArea.RotationDegrees.y == 270)
+		{
+			ItemSpatialArea.RotationDegrees = new Vector3(0,-90,0);
+		}
+	}
+
+
+	public override void _Notification(int what)
+	{
+    	if (what == MainLoop.NotificationWmQuitRequest){
+
+		}
+	}
 }
