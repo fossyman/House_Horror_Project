@@ -1,0 +1,74 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Scripts/Managers/PlayerManager.cs" type="Script" id=1]
+[ext_resource path="res://Scripts/Managers/HeadManager.cs" type="Script" id=2]
+[ext_resource path="res://Scripts/Managers/InventoryManager.cs" type="Script" id=3]
+
+[sub_resource type="SphereShape" id=1]
+radius = 0.5
+
+[sub_resource type="RayShape" id=2]
+length = 2.0
+
+[node name="Player" type="KinematicBody"]
+script = ExtResource( 1 )
+_MovementSpeed = 5.0
+
+[node name="Head" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
+script = ExtResource( 2 )
+_CurrSens = 0.1
+
+[node name="Camera" type="Camera" parent="Head"]
+
+[node name="HUD" type="Control" parent="."]
+margin_right = 1024.0
+margin_bottom = 598.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Inventory" type="Spatial" parent="HUD"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0473299 )
+script = ExtResource( 3 )
+
+[node name="Inventory Hud" type="Control" parent="HUD/Inventory"]
+margin_right = 1024.0
+margin_bottom = 598.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="HUD/Inventory/Inventory Hud"]
+margin_left = 414.312
+margin_top = 414.312
+margin_right = 597.312
+margin_bottom = 466.312
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HUD/Inventory/Inventory Hud"]
+margin_left = 276.208
+margin_top = 244.46
+margin_right = 716.208
+margin_bottom = 362.46
+
+[node name="Tween" type="Tween" parent="HUD/Inventory/Inventory Hud"]
+
+[node name="Spatial" type="Spatial" parent="HUD/Inventory"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0 )
+
+[node name="Camera" type="Camera" parent="HUD/Inventory"]
+transform = Transform( 1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.5, 3.5 )
+current = true
+
+[node name="Collision Ray" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
+shape = SubResource( 1 )
+
+[node name="Floor Ray" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2, 0 )
+shape = SubResource( 2 )
+
+[connection signal="tween_all_completed" from="HUD/Inventory/Inventory Hud/Tween" to="HUD/Inventory" method="TweenerFinished"]
