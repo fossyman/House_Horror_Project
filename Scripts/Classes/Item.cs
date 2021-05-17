@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class Item : Godot.Object
+public class Item : Reference
 {
 public int ID; // The Item's ID
 public enum ItemTypeEnum{Item,Ammo,Weapon};
@@ -22,20 +22,17 @@ public PackedScene ItemScene;
         this.CanEquip = _CanEquip;
         this.ItemName = _Name;
         this.ItemScenePath = _ItemScenePath;
+        this.ItemScene = (PackedScene)ResourceLoader.Load(_ItemScenePath);
         this.Stackable = _Stackable;
         this.MaxStack = _MaxStack;
 
         if(ItemScenePath != null) // Checks in the items scene path in not empty
         {
-            PackedScene _ItemScene = (PackedScene)ResourceLoader.Load(ItemScenePath); // Loads the Item from the Scene path set above
-            ItemScene = _ItemScene;
-            Spatial Item = (Spatial)_ItemScene.Instance(); // Creates an instance of the item from the item scene
-            ItemInfo = Item.GetChild(0);
+            Spatial _Item = (Spatial)ItemScene.Instance(); // Creates an instance of the item from the item scene
+            ItemInfo = _Item.GetChild(0);
+            _Item.QueueFree();
         }
     }
-
-
-
 
         public Item(){} // Legit Useless. Just used to stop a godot error
 }

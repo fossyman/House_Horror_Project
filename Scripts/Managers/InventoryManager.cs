@@ -117,4 +117,10 @@ public class InventoryManager : Spatial
 			ItemSpatialArea.RotationDegrees = new Vector3(0,-90,0);
 		}
 	}
+
+	public override void _Notification(int what)
+	{
+    	if (what == MainLoop.NotificationWmQuitRequest){
+		}
+	}
 }

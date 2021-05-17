@@ -6,6 +6,7 @@ public class GameManager : Spatial
     public ItemDB _ItemDB = new ItemDB();
     public override void _Ready()
     {
+        AddChild(_ItemDB);
         _ItemDB.BuildDatabase();
     }
 

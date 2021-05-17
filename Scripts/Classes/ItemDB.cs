@@ -13,9 +13,9 @@ public List<Item> items = new List<Item>();
     }
     public void BuildDatabase()
     {
-    items = new List<Item>(){
-    new Item(0,1,false,"Test Item","res://Test Item.tscn",true,5)
-    };
+    items.Add( new Item(0,1,false,"Test Item","res://Test Item.tscn",true,5) );
     }
+
+
 
 }
