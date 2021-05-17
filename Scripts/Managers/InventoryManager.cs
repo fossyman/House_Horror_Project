@@ -7,12 +7,13 @@ public class InventoryManager : Spatial
 	private GameManager _GameManager; // Just Gives a reference to the gamemanager
 	private Control _InventoryDisplay;
 	[Export]private List<Item> CurrentItems = new List<Item>();
+	[Export]private List<Spatial> CurrentItemSpatials = new List<Spatial>();
 	private float RotationDuration = 4f;
 	private Vector3 Radius = new Vector3(2,0,2);
 	private float OrbitAngleOffset;
 	private Spatial ItemSpatialArea;
 	[Export]private bool _CanRotate=true;
-
+	private Vector3 ItemRotation = new Vector3();
 	private Tween InventoryTweener;
 	public override void _Ready()
 	{
@@ -21,12 +22,23 @@ public class InventoryManager : Spatial
 		ItemSpatialArea = (Spatial)GetChild(1);
 	}
 
+    public override void _Process(float delta)
+    {
+		if(CurrentItems.Count>0)
+		{
+    	UpdateItemRotations();
+		}
+    }
+
+    
+
 	private void AddItemToInventory(int _ID)
 	{
     Item _ItemToAdd = _GameManager._ItemDB.GetItem(_ID);
-	CurrentItems.Add(_ItemToAdd);
 	Spatial ItemScene = (Spatial)_ItemToAdd.ItemScene.Instance();
 	ItemSpatialArea.AddChild(ItemScene);
+	CurrentItems.Add(_ItemToAdd);
+	CurrentItemSpatials.Add(ItemScene);
 	UpdateInventoryCircle();
     ResetInventoryRotation();
 	}
@@ -82,6 +94,15 @@ public class InventoryManager : Spatial
 		}
 	  }
     }
+	private void UpdateItemRotations()
+	{
+		ItemRotation.y = Mathf.Wrap(ItemRotation.y,0,360);
+		ItemRotation.y+=1;
+		for(int x = 0; x < CurrentItemSpatials.Count;x++)
+		{
+			CurrentItemSpatials[x].RotationDegrees=ItemRotation;
+		}
+	}
 	public void TweenerFinished()
   	{
 		GD.Print("Finished");
@@ -94,14 +115,6 @@ public class InventoryManager : Spatial
 		if(ItemSpatialArea.RotationDegrees.y == 270)
 		{
 			ItemSpatialArea.RotationDegrees = new Vector3(0,-90,0);
-		}
-	}
-
-
-	public override void _Notification(int what)
-	{
-    	if (what == MainLoop.NotificationWmQuitRequest){
-
 		}
 	}
 }
